@@ -242,7 +242,7 @@
                                     @endforeach
                                 @endif
                             </ul>
-                            <!--/ End Tab Nav -->
+                            
                         </div>
 
             </div>
