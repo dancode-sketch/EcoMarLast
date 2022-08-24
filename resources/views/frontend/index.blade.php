@@ -73,21 +73,21 @@
 <div class="product-area section">
         <div class="container">
             <div class="row">
-                <div class="col-12">
+                <div class="col-xs-6 col-lg-12">
                     <div class="section-title">
                         <h2>Productos destacados</h2>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-12">
+                <div class="col-xs-6 col-lg-12">
                     <div class="product-info">
 
                         <div class="tab-content isotope-grid" id="myTabContent">
                              
                             @if($product_lists)
                                 @foreach($product_lists as $key=>$product)
-                                <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item {{$product->cat_id}}">
+                                <div class="col-xs-6 col-md-4 col-lg-3  isotope-item {{$product->cat_id}}">
                                     <div class="single-product">
                                         <div class="product-img">
                                             <a href="{{route('product-detail',$product->slug)}}">
@@ -126,7 +126,10 @@
                                                     $after_discount=($product->price-($product->price*$product->discount)/100);
                                                 @endphp
                                                 <span>S/. {{number_format($after_discount,2)}}</span>
-                                                <del style="padding-left:4%;">S/. {{number_format($product->price,2)}}</del>
+                                                @if(($product->discount)>0)
+												<del style="padding-left:4%;">S/. {{number_format($product->price,2)}}</del>
+												@endif
+                                                
                                                 
                                             </div>
                                             <div>

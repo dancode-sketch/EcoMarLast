@@ -467,7 +467,7 @@ Version:1.0
 	width:100%;
 }
 .header.sticky .middle-inner{
-	position:fixed;
+	/* position:fixed; */
 	top:0;
 	left:0;
 	background:#fff;

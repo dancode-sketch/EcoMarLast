@@ -102,11 +102,11 @@
 								</div>
 								<!--/ End Shop By Price -->
                                 <!-- Single Widget -->
-                                <div class="single-widget recent-post">
+                                <!-- <div class="single-widget recent-post">
                                     <h3 class="title">Recien Agregados</h3>
                                     {{-- {{dd($recent_products)}} --}}
                                     @foreach($recent_products as $product)
-                                        <!-- Single Post -->
+                                        
                                         @php 
                                             $photo=explode(',',$product->photo);
                                         @endphp
@@ -122,9 +122,9 @@
                                                 <p class="price"><del class="text-muted">S/. {{number_format($product->price,2)}}</del> S/. {{number_format($org,2)}}  </p>                                                
                                             </div>
                                         </div>
-                                        <!-- End Single Post -->
+                                        
                                     @endforeach
-                                </div>
+                                </div> -->
                                 <!--/ End Single Widget -->
                                 <!-- Single Widget -->
                                 <div class="single-widget category">
@@ -213,7 +213,11 @@
 																	$after_discount=($product->price-($product->price*$product->discount)/100);
 																@endphp
 																<span>S/. {{number_format($after_discount,2)}}</span>
+																@if(($product->discount)>0)
+												
 																<del>S/. {{number_format($product->price,2)}}</del>
+																@endif
+																
 															</div>
 															<h3 class="title"><a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a></h3>
 														{{-- <p>{!! html_entity_decode($product->summary) !!}</p> --}}

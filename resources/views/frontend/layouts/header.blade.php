@@ -187,6 +187,65 @@
                 </div>
  
         </div>
+        <div class="row">
+            <nav>
+                <label for="drop" class="toggle">&#8801;  Categorías</label>
+                <input type="checkbox" id="drop" />
+
+               
+                <ul class="menu">
+                @php
+                    $categories=DB::table('categories')->where('status','active')->where('is_parent',1)->get();
+                    // dd($categories);
+                @endphp
+                @foreach($categories as $key=>$cat)
+               
+                
+                @if($cat->is_parent)
+                <li style="color:black !important;"><a href="{{route('product-cat',$cat->slug)}}">{{$cat->title}}</a></li>
+                
+                @endif
+                @endforeach
+                   
+                    <!-- <li> 
+                    
+                    <label for="drop-1" class="toggle">Service +</label>
+                    <a href="#">Service</a>
+                    <input type="checkbox" id="drop-1"/>
+                    <ul>
+                        <li><a href="#">Service 1</a></li>
+                        <li><a href="#">Service 2</a></li>
+                        <li><a href="#">Service 3</a></li>
+                    </ul>
+                    </li>
+                    <li> 
+                    
+                    
+                    <label for="drop-2" class="toggle">Portfolio +</label>
+                    <a href="#">Portfolio</a>
+                    <input type="checkbox" id="drop-2"/>
+                    <ul>
+                        <li><a href="#">Portfolio 1</a></li>
+                        <li><a href="#">Portfolio 2</a></li>
+                        <li> 
+                        
+                        
+                        <label for="drop-3" class="toggle">Works +</label>
+                        <a href="#">Works</a>
+                        <input type="checkbox" id="drop-3"/>
+                        <ul>
+                            <li><a href="#">HTML/CSS</a></li>
+                            <li><a href="#">jQuery</a></li>
+                            <li><a href="#">Python</a></li>
+                        </ul>
+                        </li>
+                    </ul>
+                    </li> -->
+                
+                </ul>
+                
+                </nav>
+</div>
         </div>
     
     </div>
@@ -222,28 +281,173 @@
         </div>
     </div> -->
     <!--/ End Header Inner -->
-    <div class="row">
-            <div class="nav-main">
-                            <!-- Tab Nav -->
-                            <ul class="nav nav-tabs filter-tope-group" id="myTab" role="tablist">
-                                @php
-                                    $categories=DB::table('categories')->where('status','active')->where('is_parent',1)->get();
-                                    // dd($categories);
-                                @endphp
-                                @if($categories)
-                                <button class="btn" style="background:#face0d; color:black;"data-filter="*">
-                                    Todos
-                                </button>
-                                    @foreach($categories as $key=>$cat)
 
-                                    <button class="btn" style="background:#face0d;color:black;"data-filter=".{{$cat->id}}">
-                                        {{$cat->title}}
-                                    </button>
-                                    @endforeach
-                                @endif
-                            </ul>
-                            
-                        </div>
 
-            </div>
+
+
+<style>
+
+
+#container {
+  margin: 0 auto;
+  max-width: 890px;
+}
+p { text-align: center; }
+ .toggle, [id^=drop] {
+ display: none;
+}
+nav {
+  margin: 0;
+  padding: 0;
+  background-color: #face0d;
+  color:black !important;
+}
+
+#logo {
+  display: block;
+  padding: 0 30px;
+  float: left;
+  font-size: 20px;
+  line-height: 60px;
+}
+
+nav:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+nav ul {
+  float: left;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  position: relative;
+}
+
+nav ul li {
+  margin: 0px;
+  display: inline-block;
+  float: left;
+  background-color: #face0d;
+}
+
+nav a {
+  display: block;
+  padding: 0 20px;
+  font-size: 20px;
+  line-height: 60px;
+  text-decoration: none;
+}
+
+nav ul li ul li:hover { background: #000000; }
+
+nav a:hover { background-color: #000000; }
+
+nav ul ul {
+  display: none;
+  position: absolute;
+  top: 60px;
+}
+
+nav ul li:hover > ul { display: inherit; }
+
+nav ul ul li {
+  width: 170px;
+  float: none;
+  display: list-item;
+  position: relative;
+}
+
+nav ul ul ul li {
+  position: relative;
+  top: -60px;
+  left: 170px;
+}
+
+li > a:after { content: ' +'; }
+
+li > a:only-child:after { content: ''; }
+
+
+/* Media Queries
+--------------------------------------------- */
+
+@media all and (max-width : 768px) {
+
+#logo {
+  display: block;
+  padding: 0;
+  width: 100%;
+  text-align: center;
+  float: none;
+}
+
+nav { margin: 0; }
+
+.toggle + a,
+ .menu { display: none; }
+
+.toggle {
+  display: block;
+  background-color:black;
+  padding: 0 20px;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight:bold;
+  line-height: 60px;
+  text-decoration: none;
+  border: none;
+}
+
+.toggle:hover { background-color: #000000; }
+
+[id^=drop]:checked + ul { display: block; }
+
+nav ul li {
+  display: block;
+  width: 100%;
+}
+
+nav ul ul .toggle,
+ nav ul ul a { padding: 0 40px; }
+
+nav ul ul ul a { padding: 0 80px; }
+
+nav a:hover,
+ nav ul ul ul a { background-color: #000000; }
+
+nav ul li ul li .toggle,
+ nav ul ul a { background-color: #212121; }
+
+nav ul ul {
+  float: none;
+  position: static;
+  color: #ffffff;
+}
+
+nav ul ul li:hover > ul,
+nav ul li:hover > ul { display: none; }
+
+nav ul ul li {
+  display: block;
+  width: 100%;
+}
+
+nav ul ul ul li { position: static;
+
+}
+}
+
+@media all and (max-width : 330px) {
+
+nav ul li {
+  display: block;
+  width: 94%;
+}
+
+}
+</style>
+
 </header>
+<!-- product-cat/{slug} -->
