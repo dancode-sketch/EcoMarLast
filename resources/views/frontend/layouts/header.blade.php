@@ -192,95 +192,48 @@
                 <label for="drop" class="toggle">&#8801;  Categorías</label>
                 <input type="checkbox" id="drop" />
 
-               
                 <ul class="menu">
-                @php
-                    $categories=DB::table('categories')->where('status','active')->where('is_parent',1)->get();
-                    // dd($categories);
-                @endphp
-                @foreach($categories as $key=>$cat)
-               
-                
-                @if($cat->is_parent)
-                <li style="color:black !important;"><a href="{{route('product-cat',$cat->slug)}}">{{$cat->title}}</a></li>
-                
-                @endif
-                @endforeach
-                   
-                    <!-- <li> 
+                    @php
+                    // $category = new Category();
+                    $menu=App\Models\Category::getAllParentWithChild();
+                    $nu=0;
+                    @endphp
+                    @if($menu)
                     
-                    <label for="drop-1" class="toggle">Service +</label>
-                    <a href="#">Service</a>
-                    <input type="checkbox" id="drop-1"/>
-                    <ul>
-                        <li><a href="#">Service 1</a></li>
-                        <li><a href="#">Service 2</a></li>
-                        <li><a href="#">Service 3</a></li>
-                    </ul>
-                    </li>
-                    <li> 
-                    
-                    
-                    <label for="drop-2" class="toggle">Portfolio +</label>
-                    <a href="#">Portfolio</a>
-                    <input type="checkbox" id="drop-2"/>
-                    <ul>
-                        <li><a href="#">Portfolio 1</a></li>
-                        <li><a href="#">Portfolio 2</a></li>
-                        <li> 
-                        
-                        
-                        <label for="drop-3" class="toggle">Works +</label>
-                        <a href="#">Works</a>
-                        <input type="checkbox" id="drop-3"/>
-                        <ul>
-                            <li><a href="#">HTML/CSS</a></li>
-                            <li><a href="#">jQuery</a></li>
-                            <li><a href="#">Python</a></li>
-                        </ul>
+                        @foreach($menu as $cat_info)
+                        @php
+                        ++$nu;
+                        @endphp
+                        @if($cat_info->child_cat->count()>0)
+                        <li>
+                            
+                        <label for="drop-{{$nu}}" class="toggle">{{$cat_info->title}} +</label>
+                        <a href="{{route('product-cat',$cat_info->slug)}}">{{$cat_info->title}}</a>
+                        <input type="checkbox" id="drop-{{$nu}}"/>
+											
+							<ul>
+								@foreach($cat_info->child_cat as $sub_menu)
+									<li><a href="{{route('product-sub-cat',[$cat_info->slug,$sub_menu->slug])}}">{{$sub_menu->title}}</a></li>
+								@endforeach
+							</ul>
                         </li>
-                    </ul>
-                    </li> -->
-                
+						@else
+                            <li><a href="{{route('product-cat',$cat->slug)}}">{{$cat_info->title}}</a></li>
+										
+						@endif
+						@endforeach
+					
+					@endif
+                     
                 </ul>
                 
                 </nav>
-</div>
+
+        </div>
         </div>
     
     </div>
-    <!-- Header Inner -->
 
-    <!-- <div class="header-inner">
-        <div class="container">
-            <div class="cat-nav-head">
-                <div class="row">
-                    <div class="col-lg-12 col-12">
-                        <div class="menu-area">
-                            
-                            <nav class="navbar navbar-expand-lg">
-                                <div class="navbar-collapse">	
-                                    <div class="nav-inner">	
-                                        <ul class="nav main-menu menu navbar-nav">
-                                            <li class="{{Request::path()=='home' ? 'active' : ''}}"><a href="{{route('home')}}">Home</a></li>
-                                            <li class="{{Request::path()=='about-us' ? 'active' : ''}}"><a href="{{route('about-us')}}">About Us</a></li>
-                                            <li class="@if(Request::path()=='product-grids'||Request::path()=='product-lists')  active  @endif"><a href="{{route('product-grids')}}">Products</a><span class="new">New</span></li>												
-                                                {{Helper::getHeaderCategory()}}
-                                            <li class="{{Request::path()=='blog' ? 'active' : ''}}"><a href="{{route('blog')}}">Blog</a></li>									
-                                               
-                                            <li class="{{Request::path()=='contact' ? 'active' : ''}}"><a href="{{route('contact')}}">Contact Us</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </nav>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-    <!--/ End Header Inner -->
 
 
 
@@ -340,9 +293,10 @@ nav a {
   text-decoration: none;
 }
 
-nav ul li ul li:hover { background: #000000; }
+nav ul li ul li:hover { background: black; 
+color: #ffffff;}
 
-nav a:hover { background-color: #000000; }
+nav a:hover { background-color: black; color: #ffffff; }
 
 nav ul ul {
   display: none;
@@ -392,7 +346,7 @@ nav { margin: 0; }
   display: block;
   background-color:black;
   padding: 0 20px;
-  color: #ffffff;
+  color: white;
   font-size: 22px;
   font-weight:bold;
   line-height: 60px;
