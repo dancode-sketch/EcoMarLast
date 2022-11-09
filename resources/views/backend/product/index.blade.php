@@ -18,35 +18,38 @@
         <table class="table table-bordered" id="product-dataTable" width="100%" cellspacing="0">
           <thead>
             <tr>
-              <th>S.N.</th>
+              
+              <th>Id</th>
               <th>Nombre</th>
+              <th>Foto</th>
               <th>Categoría</th>
-              <th>Destacado</th>
               <th>Precio</th>
+              <th>Destacado</th>
               <th>Descuento</th>
               <th>Talla</th>
               <th>Condición</th>
               <th>Marca</th>
               <th>Stock</th>
-              <th>Foto</th>
               <th>Estado</th>
+              <th>Id</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tfoot>
             <tr>
-              <th>S.N.</th>
-              <th>Title</th>
+              <th>Id</th>
+              <th>Nombre</th>
+              <th>Foto</th>
               <th>Categoría</th>
-              <th>Destacado</th>
               <th>Precio</th>
+              <th>Destacado</th>
               <th>Descuento</th>
               <th>Talla</th>
               <th>Condición</th>
               <th>Marca</th>
               <th>Stock</th>
-              <th>Foto</th>
               <th>Estado</th>
+              <th>Id</th>
               <th>Acciones</th>
             </tr>
           </tfoot>
@@ -64,13 +67,25 @@
                 <tr>
                     <td>{{$product->id}}</td>
                     <td>{{$product->title}}</td>
-                    <td>{{$product->cat_info['title']}}
+                    <td>
+                        @if($product->photo)
+                            @php
+                              $photo=explode(',',$product->photo);
+                              // dd($photo);
+                            @endphp
+                            <img src="{{$photo[0]}}" class="img-fluid zoom" style="max-width:80px" alt="{{$product->photo}}">
+                        @else
+                            <img src="{{asset('backend/img/thumbnail-default.jpg')}}" class="img-fluid" style="max-width:80px" alt="avatar.png">
+                        @endif
+                    </td>
+                    
+                    <td>{{$product->cat_info['title'] ?? 'Sin categoría'}}
                       <sub>
                           {{$product->sub_cat_info->title ?? ''}}
                       </sub>
                     </td>
-                    <td>{{(($product->is_featured==1)? 'Si': 'No')}}</td>
                     <td>S/. {{$product->price}} /-</td>
+                    <td>{{(($product->is_featured==1)? 'Si': 'No')}}</td>
                     <td>  {{$product->discount}}% OFF</td>
                     <td>{{$product->size}}</td>
                     <td>{{$product->condition}}</td>
@@ -87,23 +102,13 @@
                       @endif
                     </td>
                     <td>
-                        @if($product->photo)
-                            @php
-                              $photo=explode(',',$product->photo);
-                              // dd($photo);
-                            @endphp
-                            <img src="{{$photo[0]}}" class="img-fluid zoom" style="max-width:80px" alt="{{$product->photo}}">
-                        @else
-                            <img src="{{asset('backend/img/thumbnail-default.jpg')}}" class="img-fluid" style="max-width:80px" alt="avatar.png">
-                        @endif
-                    </td>
-                    <td>
                         @if($product->status=='active')
                             <span class="badge badge-success">{{$product->status}}</span>
                         @else
                             <span class="badge badge-warning">{{$product->status}}</span>
                         @endif
                     </td>
+                    <td>{{$product->id}}</td>
                     <td>
                         <a href="{{route('product.edit',$product->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
                     <form method="POST" action="{{route('product.destroy',[$product->id])}}">
@@ -126,12 +131,12 @@
 @endsection
 
 @push('styles')
-  <link href="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
+  <!-- <link href="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet"> -->
+  
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
   <style>
-      div.dataTables_wrapper div.dataTables_paginate{
-          display: none;
-      }
+    
       .zoom {
         transition: transform .2s; /* Animation */
       }
@@ -145,22 +150,22 @@
 @push('scripts')
 
   <!-- Page level plugins -->
-  <script src="{{asset('backend/vendor/datatables/jquery.dataTables.min.js')}}"></script>
-  <script src="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
+  <!-- <script src="{{asset('backend/vendor/datatables/jquery.dataTables.min.js')}}"></script>
+  <script src="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script> -->
+  <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.js"></script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 
   <!-- Page level custom scripts -->
-  <script src="{{asset('backend/js/demo/datatables-demo.js')}}"></script>
+  <!-- <script src="{{asset('backend/js/demo/datatables-demo.js')}}"></script> -->
   <script>
 
       $('#product-dataTable').DataTable( {
-        "scrollX": false
-            "columnDefs":[
-                {
-                    "orderable":false,
-                    "targets":[10,11,12]
-                }
-            ]
+       
+        "language": {
+      "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+    },
+        paging: false
         } );
 
         // Sweet alert
@@ -182,8 +187,8 @@
               // alert(dataID);
               e.preventDefault();
               swal({
-                    title: "Are you sure?",
-                    text: "Once deleted, you will not be able to recover this data!",
+                    title: "¿Está seguro de eliminar el registro?",
+                    text: "Si elimina el registro, no se podrá recuperar.",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
@@ -192,7 +197,7 @@
                     if (willDelete) {
                        form.submit();
                     } else {
-                        swal("Your data is safe!");
+                        swal("El registro no ha sido borrado.");
                     }
                 });
           })

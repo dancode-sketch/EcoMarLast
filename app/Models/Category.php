@@ -12,7 +12,7 @@ class Category extends Model
         return $this->hasOne('App\Models\Category','id','parent_id');
     }
     public static function getAllCategory(){
-        return  Category::orderBy('id','DESC')->with('parent_info')->paginate(10);
+        return  Category::orderBy('title','DESC')->with('parent_info')->paginate(200);
     }
 
     public static function shiftChild($cat_id){
@@ -23,16 +23,16 @@ class Category extends Model
     }
 
     public function child_cat(){
-        return $this->hasMany('App\Models\Category','parent_id','id')->where('status','active');
+        return $this->hasMany('App\Models\Category','parent_id','id')->where('status','active')->orderBy('title','ASC');
     }
     public static function getAllParentWithChild(){
-        return Category::with('child_cat')->where('is_parent',1)->where('status','active')->orderBy('title','ASC')->get();
+        return Category::with('child_cat')->where('is_parent',1)->orderBy('title','ASC')->where('status','active')->orderBy('title','ASC')->get();
     }
     public function products(){
-        return $this->hasMany('App\Models\Product','cat_id','id')->where('status','active');
+        return $this->hasMany('App\Models\Product','cat_id','id')->where('status','active')->orderBy('title','ASC');
     }
     public function sub_products(){
-        return $this->hasMany('App\Models\Product','child_cat_id','id')->where('status','active');
+        return $this->hasMany('App\Models\Product','child_cat_id','id')->where('status','active')->orderBy('title','ASC');
     }
     public static function getProductByCat($slug){
         // dd($slug);

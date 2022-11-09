@@ -285,7 +285,6 @@ big {
 /* Bread Crumbs */
 .breadcrumbs {
 	background-color: #F6F7FB;
-	position: relative;
 	padding: 30px 0px;
 }
 .breadcrumbs .bread-inner {
@@ -894,9 +893,7 @@ a:hover, a:active {
 /*--------------------------------------------------------------
 ## Posts and pages
 --------------------------------------------------------------*/
-.sticky {
-	display: block;
-}
+
 
 .hentry {
 	margin: 0 0 1.5em;

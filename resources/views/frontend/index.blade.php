@@ -80,65 +80,68 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-6 col-lg-12">
+                <div class="col-xs-6 col-lg-12" style="object-fit: cover;">
                     <div class="product-info">
 
                         <div class="tab-content isotope-grid" id="myTabContent">
                              
                             @if($product_lists)
                                 @foreach($product_lists as $key=>$product)
-                                <div class="col-xs-6 col-md-4 col-lg-3  isotope-item {{$product->cat_id}}">
-                                    <div class="single-product">
-                                        <div class="product-img">
-                                            <a href="{{route('product-detail',$product->slug)}}">
-                                                @php
-                                                    $photo=explode(',',$product->photo);
-                                                // dd($photo);
-                                                @endphp
-                                                <img class="default-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
-                                                <img class="hover-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
-                                                @if($product->stock<=0)
-                                                    <span class="out-of-stock">Sale out</span>
-                                                @elseif($product->condition=='new')
-                                                    <span class="new">Nuevo</span
-                                                @elseif($product->condition=='hot')
-                                                    <span class="hot">Lo Mejor</span>
-                                                @else
-                                                    <span class="price-dec">{{$product->discount}}% descuento</span>
-                                                @endif
+                                    @if (!is_null($product->cat_id))
+                                    
+                                    <div class="col-6 col-md-4 col-lg-3  isotope-item {{$product->cat_id}}" style="object-fit: cover; height:456px;">
+                                        <div class="single-product" >
+                                            <div class="product-img">
+                                                <a href="{{route('product-detail',$product->slug)}}">
+                                                    @php
+                                                        $photo=explode(',',$product->photo);
+                                                    // dd($photo);
+                                                    @endphp
+                                                    <img class="default-img" style="object-fit: cover;" src="{{$photo[0]}}" alt="{{$photo[0]}}">
+                                                    <img class="hover-img" style="object-fit: cover;" src="{{$photo[0]}}" alt="{{$photo[0]}}">
+                                                    <!-- @if($product->stock<=0)
+                                                        <span class="out-of-stock">Sale out</span>
+                                                    @elseif($product->condition=='new')
+                                                        <span class="new">Nuevo</span
+                                                    @elseif($product->condition=='hot')
+                                                        <span class="hot">Lo Mejor</span>
+                                                    @else
+                                                        <span class="price-dec">{{$product->discount}}% descuento</span>
+                                                    @endif -->
 
 
-                                            </a>
-                                            <!-- <div class="button-head">
-                                                <div class="product-action">
-                                                    <a data-toggle="modal" data-target="#{{$product->id}}" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>
-                                                    <a title="Wishlist" href="{{route('add-to-wishlist',$product->slug)}}" ><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
+                                                </a>
+                                                <!-- <div class="button-head">
+                                                    <div class="product-action">
+                                                        <a data-toggle="modal" data-target="#{{$product->id}}" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>
+                                                        <a title="Wishlist" href="{{route('add-to-wishlist',$product->slug)}}" ><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
+                                                    </div>
+                                                    <div class="product-action-2">
+                                                        <a title="Add to cart" href="{{route('add-to-cart',$product->slug)}}">Añadir al carrito</a>
+                                                    </div> 
+                                                </div> -->
+                                            </div>
+                                            <div class="product-content">
+                                                <h3><a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a></h3>
+                                                <div class="product-price">
+                                                    @php
+                                                        $after_discount=($product->price-($product->price*$product->discount)/100);
+                                                    @endphp
+                                                    <span>S/. {{number_format($after_discount,2)}}</span>
+                                                    @if(($product->discount)>0)
+                                                    <del style="padding-left:4%;">S/. {{number_format($product->price,2)}}</del>
+                                                    @endif
+                                                    
+                                                    
                                                 </div>
-                                                <div class="product-action-2">
-                                                    <a title="Add to cart" href="{{route('add-to-cart',$product->slug)}}">Añadir al carrito</a>
-                                                </div> 
-                                            </div> -->
-                                        </div>
-                                        <div class="product-content">
-                                            <h3><a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a></h3>
-                                            <div class="product-price">
-                                                @php
-                                                    $after_discount=($product->price-($product->price*$product->discount)/100);
-                                                @endphp
-                                                <span>S/. {{number_format($after_discount,2)}}</span>
-                                                @if(($product->discount)>0)
-												<del style="padding-left:4%;">S/. {{number_format($product->price,2)}}</del>
-												@endif
-                                                
+                                                <div>
+                                                <a href="https://wa.me/51943406540/?text=Estoy%20interesado%20en%20este%20producto%0A*{{$product->title}}*%0A{{route('product-detail',$product->slug)}}" class="whatsapp" target="_blank"> <i class="fa fa-whatsapp whatsapp-icon">Me interesa</i></a>
+                                                </div>
                                                 
                                             </div>
-                                            <div>
-                                            <a href="https://wa.me/51943406540/?text=Estoy%20interesado%20en%20este%20producto%0A*{{$product->title}}*%0A{{route('product-detail',$product->slug)}}" class="whatsapp" target="_blank"> <i class="fa fa-whatsapp whatsapp-icon">Me interesa</i></a>
-                                            </div>
-                                            
                                         </div>
                                     </div>
-                                </div>
+                                    @endif
                                 @endforeach
 
                              
@@ -170,7 +173,7 @@
                             @endphp
                             <img src="{{$photo[0]}}" alt="{{$photo[0]}}">
                             <div class="content">
-                                <p>{{$data->cat_info['title']}}</p>
+                                
                                 <h3>{{$data->title}} <br>Up to<span> {{$data->discount}}%</span></h3>
                                 <a href="{{route('product-detail',$data->slug)}}">Shop Now</a>
                             </div>
@@ -386,7 +389,7 @@
                                 <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                                     <!-- Product Slider -->
                                         <div class="product-gallery">
-                                            <div class="quickview-slider-active">
+                                            <div class="quickview-slider-active" >
                                                 @php
                                                     $photo=explode(',',$product->photo);
                                                 // dd($photo);
@@ -511,6 +514,7 @@
     
 <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=630038fc4897e5001907e907&product=sticky-share-buttons" async="async"></script>
     <style>
+      
           .how-active2{
 
             background-color:black;
@@ -526,11 +530,24 @@
 			text-align:center;
 			font-size:25px;
 			z-index:100;
+            padding: 4px;
+            bottom: 2px;
 			}
 
 		.whatsapp-icon {
-			margin-top:13px;
+			margin-top:15px;
 			}
+
+            @media only screen and (max-width : 320px) {
+                .whatsapp {
+                    font-size:14px;
+			}
+        }
+            @media only screen and (max-width : 600px) {
+                .whatsapp {
+                    font-size:20px;
+			}
+        }
         /* Banner Sliding */
         #Gslider .carousel-inner {
         background: #000000;

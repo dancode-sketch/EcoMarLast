@@ -11,7 +11,7 @@
           <label for="inputTitle" class="col-form-label">Nombre <span class="text-danger">*</span></label>
           <input id="inputTitle" type="text" name="title" placeholder="Enter title"  value="{{old('title')}}" class="form-control">
           @error('title')
-          <span class="text-danger">{{$message}}</span>
+          <span class="text-danger">Ingrese un nombre válido</span>
           @enderror
         </div>
 
@@ -19,7 +19,7 @@
           <label for="summary" class="col-form-label">Resumen <span class="text-danger">*</span></label>
           <textarea class="form-control" id="summary" name="summary">{{old('summary')}}</textarea>
           @error('summary')
-          <span class="text-danger">{{$message}}</span>
+          <span class="text-danger">Ingrese un resumen válido</span>
           @enderror
         </div>
 
@@ -27,7 +27,7 @@
           <label for="description" class="col-form-label">Descripción</label>
           <textarea class="form-control" id="description" name="description">{{old('description')}}</textarea>
           @error('description')
-          <span class="text-danger">{{$message}}</span>
+          <span class="text-danger">Ingrese una descripción</span>
           @enderror
         </div>
 
@@ -46,6 +46,9 @@
                   <option value='{{$cat_data->id}}'>{{$cat_data->title}}</option>
               @endforeach
           </select>
+          @error('cat_id')
+          <span class="text-danger">Seleccione una categoría</span>
+          @enderror
         </div>
 
         <div class="form-group d-none" id="child_cat_div">
@@ -62,7 +65,7 @@
           <label for="price" class="col-form-label">Precio(S/.) <span class="text-danger">*</span></label>
           <input id="price" type="number" name="price" placeholder="Ingrese el precio"  value="{{old('price')}}" class="form-control">
           @error('price')
-          <span class="text-danger">{{$message}}</span>
+          <span class="text-danger">Ingrese un precio</span>
           @enderror
         </div>
 
@@ -70,7 +73,7 @@
           <label for="discount" class="col-form-label">Descuento(%)</label>
           <input id="discount" type="number" name="discount" min="0" max="100" placeholder="Enter discount"  value="0" class="form-control">
           @error('discount')
-          <span class="text-danger">{{$message}}</span>
+          <span class="text-danger">Ingrese un descuento</span>
           @enderror
         </div>
         <div class="form-group">
@@ -110,7 +113,7 @@
           <label for="stock">Cantidad <span class="text-danger">*</span></label>
           <input id="quantity" type="number" name="stock" min="0" placeholder="Ingrese Cantidad"  value="{{old('stock')}}" class="form-control">
           @error('stock')
-          <span class="text-danger">{{$message}}</span>
+          <span class="text-danger">Ingrese un stock</span>
           @enderror
         </div>
         <div class="form-group">
@@ -125,7 +128,7 @@
         </div>
         <div id="holder" style="margin-top:15px;max-height:100px;"></div>
           @error('photo')
-          <span class="text-danger">{{$message}}</span>
+          <span class="text-danger">Debe seleccionar una foto</span>
           @enderror
         </div>
         
@@ -136,7 +139,7 @@
               <option value="inactive">Deshabilitado</option>
           </select>
           @error('status')
-          <span class="text-danger">{{$message}}</span>
+          <span class="text-danger">Seleccione un estado</span>
           @enderror
         </div>
         <div class="form-group mb-3">

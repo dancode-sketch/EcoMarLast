@@ -11,7 +11,7 @@
                     <div class="bread-inner">
                         <ul class="bread-list">
                             <li><a href="index1.html">Inicio<i class="ti-arrow-right"></i></a></li>
-                            <li class="active"><a href="blog-single.html">Lista de Compra</a></li>
+                            <li class="active"><a href="blog-single.html">Lista de Compras</a></li>
                         </ul>
                     </div>
                 </div>
@@ -26,6 +26,103 @@
         <section class="product-area shop-sidebar shop section">
             <div class="container">
                 <div class="row">
+
+                    <div class="col-lg-9 col-md-8 col-12">
+                        <!-- <div class="row">
+                            <div class="col-12">
+                                
+                                <div class="shop-top">
+                                    <div class="shop-shorter">
+                                        <div class="single-shorter">
+                                            <label>Mostrar :</label>
+                                            <select class="show" name="show" onchange="this.form.submit();">
+                                                <option value="">Defecto</option>
+                                                <option value="9" @if(!empty($_GET['show']) && $_GET['show']=='9') selected @endif>09</option>
+                                                <option value="15" @if(!empty($_GET['show']) && $_GET['show']=='15') selected @endif>15</option>
+                                                <option value="21" @if(!empty($_GET['show']) && $_GET['show']=='21') selected @endif>21</option>
+                                                <option value="30" @if(!empty($_GET['show']) && $_GET['show']=='30') selected @endif>30</option>
+                                            </select>
+                                        </div>
+                                        <div class="single-shorter">
+                                            <label>Ordenar por :</label>
+                                            <select class='sortBy' name='sortBy' onchange="this.form.submit();">
+                                                <option value="">Defecto</option>
+                                                <option value="title" @if(!empty($_GET['sortBy']) && $_GET['sortBy']=='title') selected @endif>Nombre</option>
+                                                <option value="price" @if(!empty($_GET['sortBy']) && $_GET['sortBy']=='price') selected @endif>Precio</option>
+                                                <option value="category" @if(!empty($_GET['sortBy']) && $_GET['sortBy']=='category') selected @endif>Categoría</option>
+                                                <option value="brand" @if(!empty($_GET['sortBy']) && $_GET['sortBy']=='brand') selected @endif>Marca</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                     <ul class="view-mode">
+                                        <li class="active"><a href="javascript:void(0)"><i class="fa fa-th-large"></i></a></li>
+                                        <li><a href="{{route('product-lists')}}"><i class="fa fa-th-list"></i></a></li>
+                                    </ul> 
+                                </div>
+                                
+                            </div>
+                        </div> -->
+                        <div class="row">
+                            {{-- {{$products}} --}}
+                            @if(count($products)>0)
+                                @foreach($products as $product)
+                                    <div class="col-lg-4 col-md-6 col-6">
+                                        <div class="single-product">
+                                            <div class="product-img">
+                                                <a href="{{route('product-detail',$product->slug)}}">
+                                                    @php
+                                                        $photo=explode(',',$product->photo);
+                                                    @endphp
+                                                    <img class="default-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
+                                                    <img class="hover-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
+                                                    @if($product->discount)
+                                                                <span class="price-dec">{{$product->discount}} % Off</span>
+                                                    @endif
+                                                </a>
+                                                <!-- <div class="button-head">
+                                                    <div class="product-action">
+                                                        <a data-toggle="modal" data-target="#{{$product->id}}" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>
+                                                        <a title="Wishlist" href="{{route('add-to-wishlist',$product->slug)}}" class="wishlist" data-id="{{$product->id}}"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
+                                                    </div>
+                                                    <div class="product-action-2">
+                                                        <a title="Add to cart" href="{{route('add-to-cart',$product->slug)}}">Add to cart</a>
+                                                    </div>
+                                                </div> -->
+                                            </div>
+                                            <div class="product-content">
+                                                <h3><a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a></h3>
+                                            
+
+                                                @php
+													$after_discount=($product->price-($product->price*$product->discount)/100);
+												@endphp
+													<span>S/. {{number_format($after_discount,2)}}</span>
+													@if(($product->discount)>0)
+												
+													<del>S/. {{number_format($product->price,2)}}</del>
+												@endif
+                                                
+                                            </div>
+                                            <div>
+                                            <a href="https://wa.me/51943406540/?text=Estoy%20interesado%20en%20este%20producto%0A*{{$product->title}}*%0A{{route('product-detail',$product->slug)}}" class="whatsapp" target="_blank"> <i class="fa fa-whatsapp whatsapp-icon">Me interesa</i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @else
+                                    <h4 class="text-warning" style="margin:100px auto;">No se encontraron productos.</h4>
+                            @endif
+
+
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 justify-content-center d-flex">
+                                {{$products->appends($_GET)->links()}}
+                            </div>
+                          </div>
+
+                    </div>
                     <div class="col-lg-3 col-md-4 col-12">
                         <div class="shop-sidebar">
                                 <!-- Single Widget -->
@@ -62,7 +159,7 @@
                                 </div>
                                 <!--/ End Single Widget -->
                                 <!-- Shop By Price -->
-                                    <div class="single-widget range">
+                                    <!-- <div class="single-widget range">
                                         <h3 class="title">Ordenar por Precio</h3>
                                         <div class="price-filter">
                                             <div class="price-filter-inner">
@@ -82,14 +179,14 @@
                                             </div>
                                         </div>
 
-                                    </div>
+                                    </div> -->
                                     <!--/ End Shop By Price -->
                                 <!-- Single Widget -->
-                                <div class="single-widget recent-post">
+                                <!-- <div class="single-widget recent-post">
                                     <h3 class="title">Recien Subidos</h3>
                                     {{-- {{dd($recent_products)}} --}}
                                     @foreach($recent_products as $product)
-                                        <!-- Single Post -->
+                                        
                                         @php
                                             $photo=explode(',',$product->photo);
                                         @endphp
@@ -106,9 +203,9 @@
 
                                             </div>
                                         </div>
-                                        <!-- End Single Post -->
+                                        
                                     @endforeach
-                                </div>
+                                </div> -->
                                 <!--/ End Single Widget -->
                                 <!-- Single Widget -->
                                 <div class="single-widget category">
@@ -124,96 +221,6 @@
                                 </div>
                                 <!--/ End Single Widget -->
                         </div>
-                    </div>
-                    <div class="col-lg-9 col-md-8 col-12">
-                        <div class="row">
-                            <div class="col-12">
-                                <!-- Shop Top -->
-                                <div class="shop-top">
-                                    <div class="shop-shorter">
-                                        <div class="single-shorter">
-                                            <label>Mostrar :</label>
-                                            <select class="show" name="show" onchange="this.form.submit();">
-                                                <option value="">Defecto</option>
-                                                <option value="9" @if(!empty($_GET['show']) && $_GET['show']=='9') selected @endif>09</option>
-                                                <option value="15" @if(!empty($_GET['show']) && $_GET['show']=='15') selected @endif>15</option>
-                                                <option value="21" @if(!empty($_GET['show']) && $_GET['show']=='21') selected @endif>21</option>
-                                                <option value="30" @if(!empty($_GET['show']) && $_GET['show']=='30') selected @endif>30</option>
-                                            </select>
-                                        </div>
-                                        <div class="single-shorter">
-                                            <label>Ordenar por :</label>
-                                            <select class='sortBy' name='sortBy' onchange="this.form.submit();">
-                                                <option value="">Defecto</option>
-                                                <option value="title" @if(!empty($_GET['sortBy']) && $_GET['sortBy']=='title') selected @endif>Nombre</option>
-                                                <option value="price" @if(!empty($_GET['sortBy']) && $_GET['sortBy']=='price') selected @endif>Precio</option>
-                                                <option value="category" @if(!empty($_GET['sortBy']) && $_GET['sortBy']=='category') selected @endif>Categoría</option>
-                                                <option value="brand" @if(!empty($_GET['sortBy']) && $_GET['sortBy']=='brand') selected @endif>Marca</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <ul class="view-mode">
-                                        <li class="active"><a href="javascript:void(0)"><i class="fa fa-th-large"></i></a></li>
-                                        <li><a href="{{route('product-lists')}}"><i class="fa fa-th-list"></i></a></li>
-                                    </ul>
-                                </div>
-                                <!--/ End Shop Top -->
-                            </div>
-                        </div>
-                        <div class="row">
-                            {{-- {{$products}} --}}
-                            @if(count($products)>0)
-                                @foreach($products as $product)
-                                    <div class="col-lg-4 col-md-6 col-12">
-                                        <div class="single-product">
-                                            <div class="product-img">
-                                                <a href="{{route('product-detail',$product->slug)}}">
-                                                    @php
-                                                        $photo=explode(',',$product->photo);
-                                                    @endphp
-                                                    <img class="default-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
-                                                    <img class="hover-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
-                                                    @if($product->discount)
-                                                                <span class="price-dec">{{$product->discount}} % Off</span>
-                                                    @endif
-                                                </a>
-                                                <!-- <div class="button-head">
-                                                    <div class="product-action">
-                                                        <a data-toggle="modal" data-target="#{{$product->id}}" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>
-                                                        <a title="Wishlist" href="{{route('add-to-wishlist',$product->slug)}}" class="wishlist" data-id="{{$product->id}}"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
-                                                    </div>
-                                                    <div class="product-action-2">
-                                                        <a title="Add to cart" href="{{route('add-to-cart',$product->slug)}}">Add to cart</a>
-                                                    </div>
-                                                </div> -->
-                                            </div>
-                                            <div class="product-content">
-                                                <h3><a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a></h3>
-                                                @php
-                                                    $after_discount=($product->price-($product->price*$product->discount)/100);
-                                                @endphp
-                                                <span>S/. {{number_format($after_discount,2)}}</span>
-                                                <del style="padding-left:4%;">S/. {{number_format($product->price,2)}}</del>
-                                            </div>
-                                            <div>
-                                            <a href="https://wa.me/51943406540/?text=Estoy%20interesado%20en%20este%20producto%0A*{{$product->title}}*%0A{{route('product-detail',$product->slug)}}" class="whatsapp" target="_blank"> <i class="fa fa-whatsapp whatsapp-icon">Me interesa</i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            @else
-                                    <h4 class="text-warning" style="margin:100px auto;">No se encontraron productos.</h4>
-                            @endif
-
-
-
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 justify-content-center d-flex">
-                                {{$products->appends($_GET)->links()}}
-                            </div>
-                          </div>
-
                     </div>
                 </div>
             </div>

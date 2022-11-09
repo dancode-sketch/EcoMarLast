@@ -1182,7 +1182,7 @@ Version:1.0
 	color: #fff;
 }
 .header.sticky .header-inner{
-	position:fixed;
+	/* position:fixed; */
 	top:0;
 	left:0;
 	background:#fff;

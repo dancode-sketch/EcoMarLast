@@ -35,8 +35,8 @@ window.onload = () => {
 	'use strict';
   
 	if ('serviceWorker' in navigator) {
-	  navigator.serviceWorker
-			   .register('./sw.js');
+	//   navigator.serviceWorker
+	// 		   .register('./sw.js');
 	}
   }
 (function($) {
@@ -59,9 +59,9 @@ window.onload = () => {
 		======================================*/ 
 		jQuery(window).on('scroll', function() {
 			if ($(this).scrollTop() > 200) {
-				$('.header').addClass("sticky");
+				// $('.header').addClass("sticky");
 			} else {
-				$('.header').removeClass("sticky");
+				// $('.header').removeClass("sticky");
 			}
 		});
 		
