@@ -71,9 +71,13 @@
                         @if($product->photo)
                             @php
                               $photo=explode(',',$product->photo);
-                              // dd($photo);
+                              $Img=$photo[0];
+															$prueba=explode('/',$Img);
+															$nombre1=$prueba[count($prueba)-1];
+															$nombre2='thumbs/'.$nombre1;
+            									$Img=str_replace($nombre1, $nombre2, $Img);
                             @endphp
-                            <img src="{{$photo[0]}}" class="img-fluid zoom" style="max-width:80px" alt="{{$product->photo}}">
+                            <img src="{{$Img}}" class="img-fluid zoom" style="max-width:80px" onerror="this.onerror=null;this.src='{{asset('backend/img/thumbnail-default.jpg')}}';">
                         @else
                             <img src="{{asset('backend/img/thumbnail-default.jpg')}}" class="img-fluid" style="max-width:80px" alt="avatar.png">
                         @endif

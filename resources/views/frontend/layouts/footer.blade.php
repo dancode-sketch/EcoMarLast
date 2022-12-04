@@ -1,6 +1,7 @@
 
 	<!-- Start Footer Area -->
 	<footer class="footer">
+		
 		<!-- Footer Top -->
 		<div class="footer-top section">
 			<div class="container">
@@ -28,7 +29,7 @@
 									<li>🔥Implementos de protección (cascos guantes casacas botas y demás)</li>
 									<li>🔥 Neumáticos</li>
 									<li>🔥Luces</li>
-									<li>🔥Trámites de Soats y Duplicados de Tarjetas y más.</li>
+									<li>🔥Trámites de Soats y más.</li>
 								</ul>
 							<p class="call">¿Tiene alguna duda?<span><a href="https://wa.me/{{$number}}">@foreach($settings as $data) {{$data->phone}} @endforeach</a></span></p>
 						</div>
@@ -144,6 +145,12 @@
 	<script src="{{asset('frontend/js/popper.min.js')}}"></script>
 	<!-- Bootstrap JS -->
 	<script src="{{asset('frontend/js/bootstrap.min.js')}}"></script>
+
+
+
+<!-- Bootstrap 4 Autocomplete -->
+
+
 	<!-- Color JS -->
 	<!-- <script src="{{asset('frontend/js/colors.js')}}"></script> -->
 	<!-- Slicknav JS -->
@@ -171,6 +178,9 @@
 
 	<!-- Active JS -->
 	<script src="{{asset('frontend/js/active.js')}}"></script>
+	
+<!-- Bootstrap 4 Autocomplete -->
+<script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js" crossorigin="anonymous"></script>
 
 	
 	@stack('scripts')

@@ -37,7 +37,17 @@
 <link rel="stylesheet" href="{{asset('frontend/css/style.css')}}">
 <link rel="stylesheet" href="{{asset('frontend/css/responsive.css')}}">
 
-<script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=630003ae4897e5001907e903&product=sticky-share-buttons" async="async"></script>
+<script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=630003ae4897e5001907e903&product=sticky-share-buttons' async='async'></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-166688059-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-166688059-1');
+</script>
 <style>
     /* Multilevel dropdown */
     .dropdown-submenu {

@@ -23,21 +23,14 @@ class FrontendController extends Controller
     public function index(Request $request){
         return redirect()->route($request->user()->role);
     }
-
+  
     public function home(){
-        $featured=Product::where('status','active')->where('is_featured',1)->orderBy('price','DESC')->limit(2)->get();
-        $posts=Post::where('status','active')->orderBy('id','DESC')->limit(3)->get();
-        $banners=Banner::where('status','active')->limit(3)->orderBy('id','DESC')->get();
-        // return $banner;
+        $featured=Product::select('title','price','slug','discount','photo','cat_id')->where('status','active')->where('is_featured',1)->inRandomOrder()->limit(8)->get();
         $products=Product::where('status','active')->orderBy('id','DESC')->limit(8)->get();
-        $category=Category::where('status','active')->where('is_parent',1)->orderBy('title','ASC')->get();
-        // return $category;
+        // $category=Category::where('status','active')->where('is_parent',1)->orderBy('title','ASC')->get();
         return view('frontend.index')
-                ->with('featured',$featured)
-                ->with('posts',$posts)
-                ->with('banners',$banners)
-                ->with('product_lists',$products)
-                ->with('category_lists',$category);
+                ->with('product_lists',$featured)
+                ->with('product_new',$products);
     }   
 
     public function aboutUs(){
@@ -108,6 +101,7 @@ class FrontendController extends Controller
     }
     public function productLists(){
         $products=Product::query();
+      
         
         if(!empty($_GET['category'])){
             $slug=explode(',',$_GET['category']);
@@ -141,7 +135,7 @@ class FrontendController extends Controller
             $products->whereBetween('price',$price);
         }
 
-        $recent_products=Product::where('status','active')->orderBy('id','DESC')->limit(3)->get();
+        // $recent_products=Product::where('status','active')->orderBy('id','DESC')->limit(3)->get();
         // Sort by number
         if(!empty($_GET['show'])){
             $products=$products->where('status','active')->paginate($_GET['show']);
@@ -151,11 +145,17 @@ class FrontendController extends Controller
         }
         // Sort by name , price, category
 
-      
-        return view('frontend.pages.product-lists')->with('products',$products)->with('recent_products',$recent_products)->with('category', $slug);
+        
+        $allCategory=Category::getAllParentWithChild()->where('slug',$slug);
+        if(count($allCategory)<=0){
+            $allCategory=Category::getAllCategory()->where('slug',$slug);
+        }
+        
+        return view('frontend.pages.product-lists')->with('products',$products)->with('category', $slug)->with('allCategory',$allCategory);
     }
     public function productFilter(Request $request){
             $data= $request->all();
+            $allCategory=array();
             // return $data;
             $showURL="";
             if(!empty($data['show'])){
@@ -197,10 +197,10 @@ class FrontendController extends Controller
                 $priceRangeURL .='&price='.$data['price_range'];
             }
             if(request()->is('e-shop.loc/product-grids')){
-                return redirect()->route('product-grids',$catURL.$brandURL.$priceRangeURL.$showURL.$sortByURL);
+                return redirect()->route('product-grids',$catURL.$brandURL.$priceRangeURL.$showURL.$sortByURL)->with('allCategory',$allCategory);
             }
             else{
-                return redirect()->route('product-lists',$catURL.$brandURL.$priceRangeURL.$showURL.$sortByURL);
+                return redirect()->route('product-lists',$catURL.$brandURL.$priceRangeURL.$showURL.$sortByURL)->with('allCategory',$allCategory);
             }
     }
     public function productSearch(Request $request){
@@ -210,10 +210,68 @@ class FrontendController extends Controller
                     ->orwhere('description','like','%'.$request->search.'%')
                     ->orwhere('summary','like','%'.$request->search.'%')
                     ->orwhere('price','like','%'.$request->search.'%')
-                    ->orderBy('id','DESC')
-                    ->paginate('500');
-        return view('frontend.pages.product-grids')->with('products',$products)->with('recent_products',$recent_products);
+                    ->orderBy('id','DESC')->where('status','active')
+                    ->paginate('1000');
+        return view('frontend.pages.product-grids')->with('products',$products)->with('recent_products',$recent_products)->with('search',$request->search);
     }
+
+    public function productAuto(Request $request){
+        $term= $request->get('term');
+        $products=Product::orwhere('title','like','%'.$term.'%')
+        ->orwhere('slug','like','%'.$term.'%')
+        ->orwhere('description','like','%'.$term.'%')
+        ->orderBy('id','DESC')->where('status','active')
+        ->paginate('1000');
+
+        $distinct=[];
+
+        foreach($products as $product){
+            $distinct[]=[
+                'value'=> $product->title
+            ];
+
+        }
+        $data=array_unique($distinct, SORT_REGULAR);
+        return $data;
+    }
+
+    public function featured(Request $request){
+        // $term= $request->get('term');
+        $featured=Product::select('title','price','slug','discount','photo')->where('status','active')->where('is_featured',1)->inRandomOrder()->limit(8)->get();
+     
+        return json_encode($featured);
+        // return $featured;
+    } 
+    public function allCategoryChill(Request $request){
+        // $term= $request->get('term');
+        $category= Category::with('child_cat')->where('is_parent',1)->orderBy('title','ASC')->where('status','active')->orderBy('title','ASC')->get();
+        // $featured=Product::where('status','active')->where('is_featured',1)->orderBy('price','DESC')->get();
+     
+        return json_encode($category);
+        // return $featured;
+    } 
+
+    public function productsbyCategory(Request $request){
+         $Cat= $request->get('Cat');
+         $SubCat= $request->get('SubCat');
+
+        // Product::with(['cat_info','sub_cat_info'])->where('is_featured',1)->orderBy('title','desc')
+        // $products=Product::where('status','active')->where('is_featured',1)->orderBy('price','DESC')->limit(8)->get();
+        // $category= Category::with('child_cat')->where('is_parent',1)->orderBy('title','ASC')->where('status','active')->orderBy('title','ASC')->get();
+        $category= Category::getProductByCat($Cat);
+        // $featured=Product::where('status','active')->where('is_featured',1)->orderBy('price','DESC')->get();
+     
+        return json_encode($category);
+        // return $featured;
+    } 
+    public function productsbySubCategory(Request $request){
+        // $term= $request->get('term');
+        $category= Category::with('child_cat')->where('is_parent',1)->orderBy('title','ASC')->where('status','active')->orderBy('title','ASC')->get();
+        // $featured=Product::where('status','active')->where('is_featured',1)->orderBy('price','DESC')->get();
+     
+        return json_encode($category);
+        // return $featured;
+    } 
 
     public function productBrand(Request $request){
         $products=Brand::getProductByBrand($request->slug);
@@ -228,27 +286,36 @@ class FrontendController extends Controller
     }
     public function productCat(Request $request){
         $products=Category::getProductByCat($request->slug);
+        $allCategory=Category::getAllParentWithChild()->where('slug',$request->sub_slug);
+        if(count($allCategory)<=0){
+            $allCategory=Category::getAllCategory()->where('slug',$request->sub_slug);
+        }
+
         // return $request->slug;
         $recent_products=Product::where('status','active')->orderBy('id','DESC')->limit(3)->get();
 
         if(request()->is('e-shop.loc/product-grids')){
-            return view('frontend.pages.product-grids')->with('products',$products->products)->with('recent_products',$recent_products)->with('category',$request->slug);
+            return view('frontend.pages.product-grids')->with('products',$products->products)->with('recent_products',$recent_products)->with('category',$request->slug)->with('allCategory',json_encode($allCategory,TRUE));
         }
         else{
-            return view('frontend.pages.product-lists')->with('products',$products->products)->with('recent_products',$recent_products)->with('category',$request->slug);
+            return view('frontend.pages.product-lists')->with('products',$products->products)->with('recent_products',$recent_products)->with('category',$request->slug)->with('allCategory',json_encode($allCategory.TRUE));
         }
 
     }
     public function productSubCat(Request $request){
         $products=Category::getProductBySubCat($request->sub_slug);
+        $allCategory=Category::getAllParentWithChild()->where('slug',$request->sub_slug);
+        if(count($allCategory)<=0){
+            $allCategory=Category::getAllCategory()->where('slug',$request->sub_slug);
+        }
         // return $products;
         $recent_products=Product::where('status','active')->orderBy('id','DESC')->limit(3)->get();
 
         if(request()->is('e-shop.loc/product-grids')){
-            return view('frontend.pages.product-grids')->with('products',$products->sub_products)->with('recent_products',$recent_products)->with('category',$request->sub_slug);
+            return view('frontend.pages.product-grids')->with('products',$products->sub_products)->with('recent_products',$recent_products)->with('category',$request->sub_slug)->with('allCategory',json_encode($allCategory.TRUE));
         }
         else{
-            return view('frontend.pages.product-lists')->with('products',$products->sub_products)->with('recent_products',$recent_products)->with('category',$request->sub_slug);
+            return view('frontend.pages.product-lists')->with('products',$products->sub_products)->with('recent_products',$recent_products)->with('category',$request->sub_slug)->with('allCategory',json_encode($allCategory.TRUE));
         }
 
     }

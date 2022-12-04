@@ -3,25 +3,21 @@
 @extends('frontend.layouts.master')
 
 @section('meta')
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name='copyright' content=''>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
 	<meta name="keywords" content="La 39 Motors, accesorios, moto, motocicleta, perú, lima, repuestos">
-	<meta name="description" content="{{empty($product_detail->summary)? 'Accesorio de Moto': '$product_detail->summary'}}">
+	
 	<meta name="description" content="{{$product_detail->summary}}">
 	<meta property="og:url" content="{{route('product-detail',$product_detail->slug)}}">
-	<meta property="og:type" content="article">
+	<meta property="og:category" content="{{$product_detail->cat_info['title']}}">
 	<meta property="og:title" content="{{$product_detail->title}}">
 	<meta property="og:image" content="{{$product_detail->photo}}">
-	<meta property="og:description" content="{{$product_detail->description}}">
+	
 @endsection
-@section('title','La 39 Motors || Detalle de Producto')
+@section('title')
+{{$product_detail->title}} || La 39 Motors
+@endsection
 @section('main-content')
-@php
-
-@endphp
+<div class="sharethis-sticky-share-buttons"></div>
 		<!-- Breadcrumbs -->
 		<div class="breadcrumbs">
 			<div class="container">
@@ -30,7 +26,11 @@
 						<div class="bread-inner">
 							<ul class="bread-list">
 								<li><a href="{{route('home')}}">Inicio<i class="ti-arrow-right"></i></a></li>
-								<li class="active"><a href="">Detalle de Producto</a></li>
+								<li><a href="{{route('product-cat',$product_detail->cat_info['slug'])}}">{{$product_detail->cat_info['title']}}<i class="ti-arrow-right"></i></a></li>
+								@if($product_detail->sub_cat_info)
+								<li><a href="{{route('product-sub-cat',[$product_detail->cat_info['slug'],$product_detail->sub_cat_info['slug']])}}">{{$product_detail->sub_cat_info['title']}}<i class="ti-arrow-right"></i></a></li>
+								@endif
+								<li class="active"><a href="">{{$product_detail->title}}</a></li>
 							</ul>
 						</div>
 					</div>
@@ -57,7 +57,7 @@
 													@endphp
 													@foreach($photo as $data)
 														<li data-thumb="{{$data}}" rel="adjustX:10, adjustY:">
-															<img src="{{$data}}" alt="{{$data}}">
+															<img src="{{$data}}" alt="{{$data}}"  onerror="this.onerror=null;this.src='{{asset('backend/img/thumbnail-default.jpg')}}';">
 														</li>
 													@endforeach
 												</ul>

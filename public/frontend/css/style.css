@@ -200,7 +200,7 @@ Version:1.0
 #scrollUp {
 	right: 10px;
 	z-index: 33;
-	bottom: 10px;
+	bottom: 50px;
 	text-align: center;
 }
 #scrollUp i{

@@ -1,5 +1,4 @@
 <header class="header shop">
-  
     <!-- Topbar -->
     <div class="topbar">
         <div class="container">
@@ -36,7 +35,13 @@
                     </div>
                     <!--/ End Top Left -->
                 </div>
-           
+                <div class="col-lg-6 col-md-12 col-12">
+                    <!-- Top Right -->
+                    <div class="right-content">
+  
+                    </div>
+                    <!-- End Top Right -->
+                </div>
             </div>
         </div>
     </div>
@@ -69,8 +74,7 @@
                     
                 </div>
            
-                 
-                       
+
             </div>
             <div class="row" style="display: flex; justify-content: center;">
                 <div class="col-xs-12 col-md-3">
@@ -115,19 +119,19 @@
                         <li>
                             
                         <label for="drop-{{$nu}}" class="toggle">{{$cat_info->title}} +</label>
-                        <a href="{{route('product-cat',$cat_info->slug)}}">{{$cat_info->title}}</a>
+                        <a onclick="CargaCategoria('product-cat','{{$cat_info->slug}}')">{{$cat_info->title}}</a>
                         <input type="checkbox" id="drop-{{$nu}}"/>
 											
 							<ul>
-                                    <li><a href="{{route('product-cat',$cat_info->slug)}}">Todos</a></li>
+                    <li><a onclick="CargaCategoria('product-cat','{{$cat_info->slug}}')" >Todos</a></li>
 								@foreach($cat_info->child_cat as $sub_menu)
-									<li><a href="{{route('product-sub-cat',[$cat_info->slug,$sub_menu->slug])}}">{{$sub_menu->title}}</a></li>
+									<li><a onclick="CargaCategoria('product-sub-cat','{{$cat_info->slug}}'+'/'+'{{$sub_menu->slug}}')" >{{$sub_menu->title}}</a></li>
 								@endforeach
                                 
 							</ul>
                         </li>
 						@else
-                            <li><a href="{{route('product-cat',$cat_info->slug)}}">{{$cat_info->title}}</a></li>
+                            <li><a onclick="CargaCategoria('product-cat','{{$cat_info->slug}}')">{{$cat_info->title}}</a></li>
 										
 						@endif
 						@endforeach
@@ -171,14 +175,24 @@
             margin-top:10px;
             color: white;
         }
+        
+
     </style>
     @endpush
 
 <script type="text/javascript">
 
+function CargaCategoria(ruta,slug){
+  event.preventDefault();
+alert(ruta);
+alert(slug);
+};
+
 window.addEventListener('load', function() {
     // console.log('La página ha terminado de cargarse!!');
-   
+  //  alert(document.domain);
+  //  console.log(document);
+  CargarCategorias();
 
 var areglo =function(requets, response){
     $.ajax({
@@ -213,37 +227,95 @@ $('#remote .typeahead').typeahead(null, {
   source: bestPictures
 });
 
-// var productNames = new Array();
-// var productIds = new Object();
-// $.getJSON( "{{route('product.auto')}}", null,
-//        function ( areglo )
-//         {
-            
-//             areglo.forEach( function ( product,index )
-//             {
-//                 productNames.push( product.name );
-//                 productIds[product.name] = product.id;
-//                 console.log(product.name);
-//             } );
-//             $('#search').typeahead({source:productNames});
-//        });
-
-
-
-// $('#search').autocomplete({
-//   source: areglo,
-//   highlightClass: 'text-danger',
-//   treshold: 2
-// });   
 
 });
-
+function CargarCategorias() {
+$.ajax({
+    type: 'GET', 
+    dataType: 'json',
+    headers: {
+         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')     
+     }, 
+    url: "{{route('category.allCategoryChill')}}",
+    success: function (response) {
+        // console.log(response);
+        
+        // var response = JSON.parse(response);
+        // console.log(response);
+        
+        if (response.length == 0) {
+            // $('.causes_div').append('No Data Found');
+        } else {
+            $.each(response, function(index) {
+              // console.log(response[index].title);
+              if (response[index].is_parent==1){
+                // console.log(response[index].title);
+                var childs = response[index].child_cat
+                // console.log(childs);
+                if(childs.length>0){
+                  childs.forEach(element => {
+                    // console.log(element.title);
+                  });
+                  
+                };
+              };
+              // console.log(response[index].title);
+            // alert(response[index].title);
+            // var arrayDeCadenas = response[index].photo.split(',');
+            // var after_discount=(response[index].price-(response[index].price*response[index].discount)/100);
+            
+            // var m = 'https://la39motors.com/product-detail/';
+            // var url2= m+response[index].slug;
+            // var url=new URL(response[index].slug, m);
+            // console.log(url);
+            // console.log(url2);
+            // var name=response[index].title.replace(/['"]+/g, '');
+            // console.log(name);
+            // $('.causes_div').append(`<div class="col-lg-3 col-md-4 col-6">
+            //                             <div class="single-product">
+            //                                 <div class="product-img">
+            //                                     <a href="${url}">
+            //                                         <img class="default-img"  src="${arrayDeCadenas[0]}" loading="lazy" onerror="${arrayDeCadenas[0]}"/>`
+                                                    
+            //                                         +(response[index].discount>0?`<span class="price-dec">${response[index].discount} % Off</span>`
+            //                                         :``)+
+                                                   
+            //                                         `</a>
+            //                                 </div>
+            //                                 <div class="product-content">
+            //                                     <h3><a href="{{ url('product-detail/${response[index].slug}') }}">${response[index].title}</a></h3>
+						// 							<span>S/. ${after_discount}</span>`
+            //                                         +(response[index].discount>0?`<del>S/. ${response[index].price}</del>`
+            //                                         :``)+
+            //                                         `</div>
+            //                                 <div>
+            //                                     <a href="https://wa.me/51943406540/?text=Estoy%20interesado%20en%20este%20producto%0A*${name}*%0A${url2}" class="whatsapp" target="_blank"> <i class="fa fa-whatsapp whatsapp-icon">Me interesa</i></a>
+            //                                 </div>
+            //                             </div>
+            //                         </div>`);
+        });
+        }
+    }
+});
+};
 </script>
 
 
 <style>
 
+.loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #face0d; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
 
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 .tt-input{
     margin-top: -15px;
 }
@@ -365,7 +437,10 @@ li > a:after { content: ' +'; }
 
 li > a:only-child:after { content: ''; }
 
-
+a:not([href]):not([tabindex]):hover {
+  background-color: black; 
+  color: #ffffff;
+}
 /* Media Queries
 --------------------------------------------- */
 
@@ -447,3 +522,4 @@ nav ul li {
 </style>
 
 </header>
+<!-- product-cat/{slug} -->
